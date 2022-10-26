@@ -13,8 +13,7 @@ export const Login = () => {
 
   const handleLogin = async () => {
     login(dispatch, { username, password });
-    const TOKEN = await currentUser?.accessToken;
-    console.log("TOKEN LOGIN: ", TOKEN);
+ 
   };
 
   return (

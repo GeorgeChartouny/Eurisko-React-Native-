@@ -6,6 +6,7 @@ const userSlice = createSlice({
     error: false,
     currenUser: null,
     isFetching: false,
+    message: null,
   },
 
   reducers: {

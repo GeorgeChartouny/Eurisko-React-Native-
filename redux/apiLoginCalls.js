@@ -4,8 +4,6 @@ import  AsyncStorage  from "@react-native-async-storage/async-storage";
 
 
 export const login = async (dispatch, user) => {
-  dispatch(loginStart());
-
   const storeData = async (value) => {
     try {
       await AsyncStorage.setItem('@storage_Key', value)
@@ -29,17 +27,27 @@ const getData = async () => {
     console.log("ERRR: " , e);
   }
 }
+  dispatch(loginStart());
+
 
 
   try {
     const response = await userRequest.post("/auth/signin", user);
-    dispatch(loginSuccess(response.data));
-    const token = response.data.accessToken;
-    console.log("response: " , response.data.accessToken)
+ 
+    if( data.error){
+      console.log("error fetchingg: " , data.message);
+    }
+    if(data.accessToken) {
+
+      dispatch(loginSuccess(response.data));
+      const token = response.data.accessToken;
+      console.log("token from loginSuccess: " , response.data.accessToken)
+    
+   
 
     storeData(token);
     getData();
-
+    }
 
   } catch (error) {
     dispatch(loginFailure());
