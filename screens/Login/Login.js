@@ -12,7 +12,7 @@ export const Login = () => {
   const { isFetching, error, currentUser } = useSelector((state) => state.user);
 
   const handleLogin = async () => {
-    login(dispatch, { email, password });
+    login(dispatch, { username, password });
     const TOKEN = await currentUser?.accessToken;
     console.log("TOKEN LOGIN: ", TOKEN);
   };
