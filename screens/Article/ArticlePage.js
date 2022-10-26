@@ -4,7 +4,8 @@ import { ArticleComponent } from "./ArticleComponent";
 import { useEffect, useState } from "react";
 
 
-export const ArticlePage = ({ navigation }) => {
+export const ArticlePage = ({ route }) => {
+  console.log(route.params.selectedArticle);
 
 
   return (

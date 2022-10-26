@@ -11,9 +11,11 @@ import {
 } from "react-native";
 import { articleRequest } from "../../requestMethods";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
-export const ArticleMainPage = ({navigation}) => {
+export const ArticleMainPage = () => {
   const [articles, setArticles] = useState([]);
+  const [isFetching, setIsFetching] = useState(true);
   const [page, setPage] = useState(1);
 
   const getArticles = async () => {
@@ -28,6 +30,7 @@ export const ArticleMainPage = ({navigation}) => {
         })
         .then((res) => {
           setArticles(res.data.response.docs);
+          setIsFetching(false);
         });
     } catch (e) {
       console.log("Error fetching articles: ", e);
@@ -39,18 +42,25 @@ export const ArticleMainPage = ({navigation}) => {
     getArticles();
   }, []);
 
+  const navigation = useNavigation();
+
   return (
     <>
-      {articles ? (
+      {isFetching ? (
+        <ActivityIndicator color="#137DC5" />
+      ) : (
         <ScrollView style={{ backgroundColor: "#f0f0f0" }}>
           {articles.map((article, index) => {
             return (
               <>
                 <TouchableOpacity
+                  activeOpacity={0.7}
                   key={index}
                   onPress={() =>
-                    navigation.navigate("ArticlePage"
-                    // , {  ...article,}
+                    navigation.navigate(
+                      "ArticlePage",
+                    //   {screen: "ArticlePage"},
+                      { selectedArticle: article }
                     )
                   }
                 >
@@ -91,8 +101,6 @@ export const ArticleMainPage = ({navigation}) => {
             );
           })}
         </ScrollView>
-      ) : (
-        <ActivityIndicator size={large} color="#137DC5" />
       )}
     </>
   );

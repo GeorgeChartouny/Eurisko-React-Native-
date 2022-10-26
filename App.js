@@ -20,7 +20,7 @@ import {ArticleMainPage} from "./screens/Article/ArticleMainPage"
       <Stack.Navigator>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="ArticleMainPage" component={ArticleMainPage}/>
-        <Stack.Screen name="Article" component={ArticlePage} />
+        <Stack.Screen name="ArticlePage" component={ArticlePage} />
       </Stack.Navigator>
     </NavigationContainer>
 
