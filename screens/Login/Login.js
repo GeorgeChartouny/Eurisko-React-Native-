@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -10,17 +10,37 @@ import {
 import { Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/apiLoginCalls";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const Login = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [err, setErr] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   const dispatch = useDispatch();
   const { isFetching, error, currentUser } = useSelector((state) => state.user);
 
   const handleLogin = async () => {
     login(dispatch, { username, password });
-    navigation.navigate("ArticleMainPage");
+    const token = await AsyncStorage.getItem("@storage_Key");
+    if (token) {
+      navigation.navigate("ArticleMainPage");
+    } else {
+      setError(true);
+    }
   };
+
+  // const handleButton = () => {
+  //   if (username == null && password == null) {
+  //     setDisabled(false);
+  //   }else{
+  //     setDisabled(true);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   handleButton();
+  // }, []);
 
   return (
     <>
@@ -50,10 +70,12 @@ export const Login = ({ navigation }) => {
             mode="contained"
             style={styles.button}
             title="Login"
-            onPress={() => handleLogin()}
+            // onPress={() => handleLogin()}
+            // disabled={disabled}
           >
             Login
           </Button>
+          {err && <Text style={styles.ErrorMessage}>Error logging in!</Text>}
           <StatusBar style="auto" />
         </View>
       )}
@@ -84,5 +106,9 @@ const styles = StyleSheet.create({
   button: {
     margin: 30,
     backgroundColor: "#137DC5",
+  },
+
+  ErrorMessage: {
+    color: "red",
   },
 });
