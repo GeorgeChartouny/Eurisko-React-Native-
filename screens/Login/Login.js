@@ -6,6 +6,7 @@ import {
   TextInput,
   Image,
   ActivityIndicator,
+  Text,
 } from "react-native";
 import { Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,8 +26,10 @@ export const Login = ({ navigation }) => {
     const token = await AsyncStorage.getItem("@storage_Key");
     if (token) {
       navigation.navigate("ArticleMainPage");
+      console.log("Accepted credentials");
     } else {
-      setError(true);
+      setErr(true);
+      console.log("Not accepted credentials");
     }
   };
 
@@ -45,7 +48,7 @@ export const Login = ({ navigation }) => {
   return (
     <>
       {isFetching ? (
-        <ActivityIndicator />
+        <ActivityIndicator color="#137DC5" size="large"  style={{flex:1,alignItems:"center", justifyContent:"center"}} />
       ) : (
         <View style={styles.container}>
           <Image
@@ -70,7 +73,7 @@ export const Login = ({ navigation }) => {
             mode="contained"
             style={styles.button}
             title="Login"
-            // onPress={() => handleLogin()}
+            onPress={() => handleLogin()}
             // disabled={disabled}
           >
             Login
