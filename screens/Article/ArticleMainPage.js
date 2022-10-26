@@ -12,8 +12,9 @@ import {
 import { articleRequest } from "../../requestMethods";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { Button } from "react-native-paper";
 
-export const ArticleMainPage = () => {
+export const ArticleMainPage = ({navigation}) => {
   const [articles, setArticles] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
   const [page, setPage] = useState(1);
@@ -36,18 +37,21 @@ export const ArticleMainPage = () => {
       console.log("Error fetching articles: ", e);
     }
   };
-  console.log("articles: ", articles);
-
+  const handleLogout = async() => {
+    AsyncStorage.clear();
+    navigation.navigate("Login")
+}
   useEffect(() => {
     getArticles();
   }, []);
 
-  const navigation = useNavigation();
+//   const navigation = useNavigation();
 
   return (
     <>
+    <Button style={styles.button} title="Logout"  mode="contained" onPress={()=>handleLogout() }>Logout</Button>
       {isFetching ? (
-        <ActivityIndicator color="#137DC5" />
+        <ActivityIndicator color="#137DC5" size="large"  style={{flex:1,alignItems:"center", justifyContent:"center"}}/>
       ) : (
         <ScrollView style={{ backgroundColor: "#f0f0f0" }}>
           {articles.map((article, index) => {
@@ -59,7 +63,6 @@ export const ArticleMainPage = () => {
                   onPress={() =>
                     navigation.navigate(
                       "ArticlePage",
-                    //   {screen: "ArticlePage"},
                       { selectedArticle: article }
                     )
                   }
@@ -107,6 +110,14 @@ export const ArticleMainPage = () => {
 };
 
 const styles = StyleSheet.create({
+    button:{
+      
+        width:130,
+        backgroundColor: "#137DC5",
+        opacity:0.6,
+        marginLeft:250,
+        borderRadius:0,
+    },
   cardContainer: {
     backgroundColor: "#fff",
     margin: 10,

@@ -3,15 +3,14 @@ import React from "react";
 import { ArticleComponent } from "./ArticleComponent";
 import { useEffect, useState } from "react";
 
-
 export const ArticlePage = ({ route }) => {
-  console.log(route.params.selectedArticle);
-
+  const articleData = route.params.selectedArticle;
+  console.log("articleData: ", articleData);
 
   return (
     <View>
       {/* <Text>ArticlePage</Text> */}
-      <ArticleComponent  />
+      <ArticleComponent article={articleData} />
     </View>
   );
 };
