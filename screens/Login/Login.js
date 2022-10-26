@@ -1,11 +1,17 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { StyleSheet, View, TextInput, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/apiLoginCalls";
 
-export const Login = () => {
+export const Login = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -13,39 +19,45 @@ export const Login = () => {
 
   const handleLogin = async () => {
     login(dispatch, { username, password });
- 
+    navigation.navigate("ArticleMainPage");
   };
 
   return (
-    <View style={styles.container}>
-      <Image
-        source={require("../../assets/eurisko.jpg")}
-        style={styles.imageSize}
-      />
+    <>
+      {isFetching ? (
+        <ActivityIndicator />
+      ) : (
+        <View style={styles.container}>
+          <Image
+            source={require("../../assets/eurisko.jpg")}
+            style={styles.imageSize}
+          />
 
-      <TextInput
-        placeholder="Enter your username"
-        value={username}
-        onChangeText={setUsername}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Enter your password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry={true}
-        style={styles.input}
-      />
-      <Button
-        mode="contained"
-        style={styles.button}
-        title="Login"
-        onPress={() => handleLogin()}
-      >
-        Login
-      </Button>
-      <StatusBar style="auto" />
-    </View>
+          <TextInput
+            placeholder="Enter your username"
+            value={username}
+            onChangeText={setUsername}
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Enter your password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={true}
+            style={styles.input}
+          />
+          <Button
+            mode="contained"
+            style={styles.button}
+            title="Login"
+            onPress={() => handleLogin()}
+          >
+            Login
+          </Button>
+          <StatusBar style="auto" />
+        </View>
+      )}
+    </>
   );
 };
 

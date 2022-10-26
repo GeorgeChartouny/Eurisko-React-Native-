@@ -22,3 +22,6 @@ export const userRequest = axios.create({
   baseURL: 'http://34.245.213.76:3000',
 });
   
+export const articleRequest = axios.create({
+  baseURL: 'http://34.245.213.76:3000',
+})
