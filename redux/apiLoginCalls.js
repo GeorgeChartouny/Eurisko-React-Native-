@@ -35,18 +35,21 @@ export const login = async (dispatch, user) => {
   try {
     const response = await userRequest.post("/auth/signin", user);
 
-    // send user data to login sucess *needs error handling
-    dispatch(loginSuccess(response.data));
-    const token = response.data.accessToken;
-    console.log("token from loginSuccess: ", response.data.accessToken);
+    // console.log("response: " , response);
+    // send user data to login sucess
+    if (response.status == 201) {
+      const token = response.data.accessToken;
+      console.log("token from loginSuccess: ", response.data.accessToken);
+      dispatch(loginSuccess(response.data));
 
-    // call the async function for storing token
-    storeData(token);
-    getData();
+      // call the async function for storing token
+      storeData(token);
+      getData();
+    }
   } catch (error) {
     // trigger loginFailure from redux
-    dispatch(loginFailure());
-    console.log("response fail ");
+    dispatch(loginFailure(error.response.data.message));
+    console.log("catch error ");
     console.log("Error: ", error);
   }
 };

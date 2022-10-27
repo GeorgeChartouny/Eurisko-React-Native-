@@ -15,14 +15,16 @@ const userSlice = createSlice({
     loginStart: (state) => {
       state.isFetching = true;
     },
-      // if credentials are correct, update the currentUser data, in this case only adding the accessToken
+    // if credentials are correct, update the currentUser data, in this case only adding the accessToken
     loginSuccess: (state, action) => {
       state.isFetching = false;
       state.currenUser = action.payload;
     },
-    loginFailure: (state) => {
+    // if loginFailed
+    loginFailure: (state, action) => {
       state.isFetching = false;
       state.error = true;
+      state.message = action.payload;
     },
   },
 });
