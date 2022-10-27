@@ -6,6 +6,7 @@ import {
   TextInput,
   Image,
   ActivityIndicator,
+  Text
 } from "react-native";
 import { Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,21 +27,24 @@ export const Login = ({ navigation }) => {
     if (token) {
       navigation.navigate("ArticleMainPage");
     } else {
-      setError(true);
+      setErr(true);
     }
   };
 
-  // const handleButton = () => {
-  //   if (username == null && password == null) {
-  //     setDisabled(false);
-  //   }else{
-  //     setDisabled(true);
-  //   }
-  // };
+  const handleButton = () => {
+    if (username == "" && password == "") {
+      console.log("fetna 3al handlebutton awal if");
+      setDisabled(true);
+    }if (username !=="" && password !=="") {
+      setDisabled(false);
+      console.log("fetna 3al handlebutton tene if");
 
-  // useEffect(() => {
-  //   handleButton();
-  // }, []);
+    }
+  };
+
+  useEffect(() => {
+    handleButton();
+  }, [username, password]);
 
   return (
     <>
@@ -70,8 +74,8 @@ export const Login = ({ navigation }) => {
             mode="contained"
             style={styles.button}
             title="Login"
-            // onPress={() => handleLogin()}
-            // disabled={disabled}
+            onPress={() => handleLogin()}
+            disabled={disabled}
           >
             Login
           </Button>
