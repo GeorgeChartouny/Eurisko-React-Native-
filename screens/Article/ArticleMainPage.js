@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -14,7 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "react-native-paper";
 
-export const ArticleMainPage = ({navigation}) => {
+export const ArticleMainPage = ({ navigation }) => {
   const [articles, setArticles] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
   const [page, setPage] = useState(1);
@@ -37,21 +38,38 @@ export const ArticleMainPage = ({navigation}) => {
       console.log("Error fetching articles: ", e);
     }
   };
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     AsyncStorage.clear();
-    navigation.navigate("Login")
-}
+    navigation.navigate("Login");
+  };
   useEffect(() => {
     getArticles();
   }, []);
 
-//   const navigation = useNavigation();
+  //   const navigation = useNavigation();
 
   return (
     <>
-    <Button style={styles.button} title="Logout"  mode="contained" onPress={()=>handleLogout() }>Logout</Button>
+      <View style={styles.TopContainer}>
+        <TextInput
+          style={styles.SearchBar}
+          placeholder="Search for an article..."
+        />
+        <Button
+          style={styles.button}
+          title="Logout"
+          mode="contained"
+          onPress={() => handleLogout()}
+        >
+          Logout
+        </Button>
+      </View>
       {isFetching ? (
-        <ActivityIndicator color="#137DC5" size="large"  style={{flex:1,alignItems:"center", justifyContent:"center"}}/>
+        <ActivityIndicator
+          color="#137DC5"
+          size="large"
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        />
       ) : (
         <ScrollView style={{ backgroundColor: "#f0f0f0" }}>
           {articles.map((article, index) => {
@@ -61,15 +79,14 @@ export const ArticleMainPage = ({navigation}) => {
                   activeOpacity={0.7}
                   key={index}
                   onPress={() =>
-                    navigation.navigate(
-                      "ArticlePage",
-                      { selectedArticle: article }
-                    )
+                    navigation.navigate("ArticlePage", {
+                      selectedArticle: article,
+                    })
                   }
                 >
                   <View style={styles.cardContainer}>
                     <View>
-                      {article.multimedia==null ? (
+                      {article.multimedia == null ? (
                         <Image
                           style={styles.cardImage}
                           source={{
@@ -110,14 +127,28 @@ export const ArticleMainPage = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-    button:{
-      
-        width:130,
-        backgroundColor: "#137DC5",
-        opacity:0.6,
-        marginLeft:250,
-        borderRadius:0,
-    },
+  TopContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  SearchBar: {
+    borderWidth: 1,
+    borderColor: "#137DC5",
+    borderRadius: 4,
+    width: 150,
+    backgroundColor: "#f1f1f1",
+    color: "#137DC5",
+  },
+  button: {
+    width: 90,
+    backgroundColor: "#137DC5",
+    opacity: 0.6,
+
+    borderRadius: 4,
+  },
   cardContainer: {
     backgroundColor: "#fff",
     margin: 10,
