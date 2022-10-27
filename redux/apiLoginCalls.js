@@ -33,11 +33,7 @@ const getData = async () => {
   try {
     const response = await userRequest.post("/auth/signin", user);
  
-    if( data.error){
-      console.log("error fetchingg: " , data.message);
-    }
-    if(data.accessToken) {
-
+  
       dispatch(loginSuccess(response.data));
       const token = response.data.accessToken;
       console.log("token from loginSuccess: " , response.data.accessToken)
@@ -46,7 +42,7 @@ const getData = async () => {
 
     storeData(token);
     getData();
-    }
+    
 
   } catch (error) {
     dispatch(loginFailure());

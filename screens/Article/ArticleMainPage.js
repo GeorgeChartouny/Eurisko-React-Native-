@@ -52,7 +52,7 @@ export const ArticleMainPage = () => {
         <ScrollView style={{ backgroundColor: "#f0f0f0" }}>
           {articles.map((article, index) => {
             return (
-              <>
+              <View key={index}>
                 <TouchableOpacity
                   activeOpacity={0.7}
                   key={index}
@@ -97,7 +97,7 @@ export const ArticleMainPage = () => {
                     </View>
                   </View>
                 </TouchableOpacity>
-              </>
+              </View>
             );
           })}
         </ScrollView>
