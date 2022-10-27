@@ -4,19 +4,17 @@ import { ArticleComponent } from "./ArticleComponent";
 import { useEffect, useState } from "react";
 
 export const ArticlePage = ({ route }) => {
+  // getting the props debending of the articled pressed
   const articleData = route.params.selectedArticle;
-  console.log("articleData: ", articleData);
 
-  // const formatHTML = (content) => {
-  //   const text = content.replace(/<p>/g, "").replace(/<\/p>/g, "");
-  //   return text;
-  // };
+
+  // function trigger it if the content is HTML
+      // const formatHTML = (content) => {
+      //   const text = content.replace(/<p>/g, "").replace(/<\/p>/g, "");
+      //   return text;
+      // };
 
   return (
-    // <View>
-    //   {/* <Text>ArticlePage</Text> */}
-    //   <ArticleComponent article={articleData} />
-    // </View>
 
     <ScrollView style={{ backgroundColor: "#f0f0f0" }}>
       {articleData.multimedia==null ? (
