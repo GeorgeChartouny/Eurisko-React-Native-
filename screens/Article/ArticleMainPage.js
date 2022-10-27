@@ -37,6 +37,7 @@ export const ArticleMainPage = ({ navigation }) => {
         });
     } catch (e) {
       console.log("Error fetching articles: ", e);
+      navigation.navigate("Login");
     }
   };
 

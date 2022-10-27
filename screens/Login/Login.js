@@ -12,26 +12,42 @@ import { Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/apiLoginCalls";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { loginSuccess } from "../../redux/userRedux";
 
 export const Login = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [err, setErr] = useState(false);
+  // const [err, setErr] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const dispatch = useDispatch();
-  const { isFetching, error, currentUser } = useSelector((state) => state.user);
+  const { isFetching, error, message, currentUser } = useSelector(
+    (state) => state.user
+  );
 
   // Passing username and password to redux
   const handleLogin = async () => {
-    login(dispatch, { username, password });
-    const token = await AsyncStorage.getItem("@storage_Key");
-    if (token) {
-      navigation.navigate("ArticleMainPage");
-    } else {
-      //return error message if status isn't 200
-      setErr(true);
+    try {
+      await login(dispatch, { username, password });
+      if (!message) {
+        navigation.navigate("ArticleMainPage");
+        console.log("login success");
+        console.log("message in no message: " , message);
+      }
+      if (message) {
+        console.log("message!!!", message);
+        // navigation.navigate("Login");
+      }
+    } catch (e) {
+      console.log("Error logging in!");
+      console.log("catch error logging in: ", e);
+   
     }
+  
   };
+
+  useEffect(()=> {
+    handleButton();
+  },[])
 
   // condition to set login button disabled/enabled
   const handleButton = () => {
@@ -51,7 +67,11 @@ export const Login = ({ navigation }) => {
   return (
     <>
       {isFetching ? (
-        <ActivityIndicator />
+        <ActivityIndicator
+          color="#137DC5"
+          size="large"
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        />
       ) : (
         <View style={styles.container}>
           <Image
@@ -81,7 +101,7 @@ export const Login = ({ navigation }) => {
           >
             Login
           </Button>
-          {err && <Text style={styles.ErrorMessage}>Error logging in!</Text>}
+          {error && <Text style={styles.ErrorMessage}>{message}</Text>}
           <StatusBar style="auto" />
         </View>
       )}
