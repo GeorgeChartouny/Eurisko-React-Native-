@@ -19,6 +19,7 @@ export const ArticleMainPage = ({ navigation }) => {
   const [articles, setArticles] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
   const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const getArticles = async () => {
     try {
@@ -46,14 +47,16 @@ export const ArticleMainPage = ({ navigation }) => {
     getArticles();
   }, []);
 
-  //   const navigation = useNavigation();
-
   return (
     <>
       <View style={styles.TopContainer}>
         <TextInput
           style={styles.SearchBar}
           placeholder="Search for an article..."
+          onChangeText={(text) => {
+            setSearchTerm(text);
+          }}
+          value={searchTerm}
         />
         <Button
           style={styles.button}
@@ -72,54 +75,66 @@ export const ArticleMainPage = ({ navigation }) => {
         />
       ) : (
         <ScrollView style={{ backgroundColor: "#f0f0f0" }}>
-          {articles.map((article, index) => {
-            return (
-              <>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  key={index}
-                  onPress={() =>
-                    navigation.navigate("ArticlePage", {
-                      selectedArticle: article,
-                    })
-                  }
-                >
-                  <View style={styles.cardContainer}>
-                    <View>
-                      {article.multimedia == null ? (
-                        <Image
-                          style={styles.cardImage}
-                          source={{
-                            uri: `https://static01.nyt.com/${article.multimedia}`,
-                          }}
-                          resizeMode="cover"
-                        />
-                      ) : (
-                        <Image
-                          style={styles.cardImage}
-                          source={require("../../assets/No_Image.png")}
-                          resizeMode="cover"
-                        />
-                      )}
-                    </View>
-                    <View style={styles.contentInfo}>
-                      <Text style={styles.titleMain}>
-                        {article.headline.main}
-                      </Text>
-                      <View style={styles.bottomCard}>
-                        <Text style={styles.publisherName}>
-                          {article.byline.original} -
+          {articles
+            .filter((article) => {
+              if (searchTerm == "") {
+                return article;
+              } else if (
+                JSON.stringify(article)
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase())
+              ) {
+                return article;
+              }
+            })
+            .map((article, index) => {
+              return (
+                <View key={article._id}>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    key={index}
+                    onPress={() =>
+                      navigation.navigate("ArticlePage", {
+                        selectedArticle: article,
+                      })
+                    }
+                  >
+                    <View style={styles.cardContainer}>
+                      <View>
+                        {article.multimedia == null ? (
+                          <Image
+                            style={styles.cardImage}
+                            source={{
+                              uri: `https://static01.nyt.com/${article.multimedia}`,
+                            }}
+                            resizeMode="cover"
+                          />
+                        ) : (
+                          <Image
+                            style={styles.cardImage}
+                            source={require("../../assets/No_Image.png")}
+                            resizeMode="cover"
+                          />
+                        )}
+                      </View>
+                      <View style={styles.contentInfo}>
+                        <Text style={styles.titleMain}>
+                          {article.headline.main}
                         </Text>
-                        <Text style={styles.publishDate}>
-                          Published on {article.pub_date}
-                        </Text>
+                        <View style={styles.bottomCard}>
+                          <Text style={styles.publisherName}>
+                            {article.byline.original} -
+                          </Text>
+                          <Text style={styles.publishDate}>
+                            Published on {article.pub_date}
+                          </Text>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              </>
-            );
-          })}
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
         </ScrollView>
       )}
     </>
