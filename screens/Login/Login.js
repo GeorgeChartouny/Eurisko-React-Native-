@@ -47,7 +47,7 @@ export const Login = ({ navigation }) => {
 
   // condition to set login button disabled/enabled
   const handleButton = () => {
-    if (username == "" && password == "") {
+    if ((username == "" && password == "")|| isFetching) {
       setDisabled(true);
     }
     if (username !== "" && password !== "") {

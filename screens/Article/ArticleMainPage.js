@@ -84,7 +84,11 @@ export const ArticleMainPage = ({ navigation }) => {
               if (searchTerm == "") {
                 return article;
               } else if (
-                JSON.stringify(article)
+                JSON.stringify(article.headline.main)
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase())
+                  ||
+                  JSON.stringify(article.lead_paragraph)
                   .toLowerCase()
                   .includes(searchTerm.toLowerCase())
               ) {
