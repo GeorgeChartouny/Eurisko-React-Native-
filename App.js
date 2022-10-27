@@ -1,7 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StatusBar } from "expo-status-bar";
-// import { StyleSheet, Text, View } from "react-native";
 import { Login } from "./screens/Login/Login";
 import {ArticlePage} from "./screens/Article/ArticlePage";
 import { Provider } from "react-redux";

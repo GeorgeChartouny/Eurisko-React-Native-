@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import { articleRequest } from "../../requestMethods";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
 import { Button } from "react-native-paper";
 
 export const ArticleMainPage = ({ navigation }) => {

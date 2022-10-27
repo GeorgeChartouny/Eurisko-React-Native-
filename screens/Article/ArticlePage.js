@@ -1,7 +1,5 @@
 import { View, Text, ScrollView, Image, StyleSheet } from "react-native";
 import React from "react";
-import { ArticleComponent } from "./ArticleComponent";
-import { useEffect, useState } from "react";
 
 export const ArticlePage = ({ route }) => {
   // getting the props debending of the articled pressed
