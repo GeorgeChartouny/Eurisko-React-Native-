@@ -31,23 +31,20 @@ export const Login = ({ navigation }) => {
       if (!message) {
         navigation.navigate("ArticleMainPage");
         console.log("login success");
-        console.log("message in no message: " , message);
+        console.log("message in no message: ", message);
       }
       if (message) {
         console.log("message!!!", message);
-        // navigation.navigate("Login");
       }
     } catch (e) {
       console.log("Error logging in!");
       console.log("catch error logging in: ", e);
-   
     }
-  
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     handleButton();
-  },[])
+  }, []);
 
   // condition to set login button disabled/enabled
   const handleButton = () => {
