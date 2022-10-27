@@ -9,13 +9,10 @@ import { store } from "./redux/store";
 import {ArticleMainPage} from "./screens/Article/ArticleMainPage"
 
  function App() {
+  // screen stacked navigation
   const Stack = createNativeStackNavigator();
   return (
-    // <View style={styles.container}>
-    //   <Text>Open up App.js to start working on your app!</Text>
-    //   <StatusBar style="auto" />
-    // </View>
-  
+
     <NavigationContainer initialRouteName="Login">
       <Stack.Navigator>
         <Stack.Screen name="Login" component={Login} />
@@ -35,12 +32,3 @@ export default () => {
 </Provider>
     )
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
