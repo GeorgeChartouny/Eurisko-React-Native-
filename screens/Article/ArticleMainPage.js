@@ -69,7 +69,7 @@ export const ArticleMainPage = ({navigation}) => {
                 >
                   <View style={styles.cardContainer}>
                     <View>
-                      {article.multimedia ? (
+                      {article.multimedia==null ? (
                         <Image
                           style={styles.cardImage}
                           source={{
@@ -80,7 +80,7 @@ export const ArticleMainPage = ({navigation}) => {
                       ) : (
                         <Image
                           style={styles.cardImage}
-                          source={require("../../assets/eurisko.jpg")}
+                          source={require("../../assets/No_Image.png")}
                           resizeMode="cover"
                         />
                       )}

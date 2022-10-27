@@ -7,10 +7,10 @@ export const ArticlePage = ({ route }) => {
   const articleData = route.params.selectedArticle;
   console.log("articleData: ", articleData);
 
-  const formatHTML = (content) => {
-    const text = content.replace(/<p>/g, "").replace(/<\/p>/g, "");
-    return text;
-  };
+  // const formatHTML = (content) => {
+  //   const text = content.replace(/<p>/g, "").replace(/<\/p>/g, "");
+  //   return text;
+  // };
 
   return (
     // <View>
@@ -19,18 +19,18 @@ export const ArticlePage = ({ route }) => {
     // </View>
 
     <ScrollView style={{ backgroundColor: "#f0f0f0" }}>
-      {articleData.multimedia ? (
+      {articleData.multimedia==null ? (
         <Image
           style={styles.imageSection}
           source={{
-            uri: `https://static01.nyt.com/${article.multimedia}`,
+            uri: `https://static01.nyt.com/${articleData.multimedia}`,
           }}
           resizeMode="cover"
         />
       ) : (
         <Image
           style={styles.imageSection}
-          source={require("../../assets/No_Image.jpg")}
+          source={require("../../assets/No_Image.png")}
           resizeMode="cover"
         />
       )}
@@ -43,7 +43,8 @@ export const ArticlePage = ({ route }) => {
         </View>
         <View style={styles.articleContent}>
           <Text style={styles.articleAbstract}>
-            {formatHTML(articleData.abstract)}
+            {/* {formatHTML(articleData.abstract)} */}
+            {articleData.lead_paragraph}
           </Text>
         </View>
       </View>
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
     fontSize: 23,
     color: "#323232",
     fontFamily: "Times New Roman",
-    fontWeight: 600,
+    fontWeight: "600",
   },
   articleInfo: {
     fontSize: 12,
