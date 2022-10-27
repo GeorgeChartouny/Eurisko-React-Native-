@@ -35,6 +35,8 @@ export const ArticleMainPage = ({navigation}) => {
         });
     } catch (e) {
       console.log("Error fetching articles: ", e);
+      const value = await AsyncStorage.getItem("@storage_Key");
+console.log(value);
     }
   };
   const handleLogout = async() => {
