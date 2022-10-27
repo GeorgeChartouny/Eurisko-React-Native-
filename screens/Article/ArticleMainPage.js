@@ -21,6 +21,7 @@ export const ArticleMainPage = ({ navigation }) => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // fetching articles from API and passing the token in headers
   const getArticles = async () => {
     try {
       const response = await articleRequest
@@ -39,10 +40,13 @@ export const ArticleMainPage = ({ navigation }) => {
       console.log("Error fetching articles: ", e);
     }
   };
+
+  // removing token from storage on logout
   const handleLogout = async () => {
     AsyncStorage.clear();
     navigation.navigate("Login");
   };
+
   useEffect(() => {
     getArticles();
   }, []);
