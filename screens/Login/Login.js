@@ -6,7 +6,7 @@ import {
   TextInput,
   Image,
   ActivityIndicator,
-  Text
+  Text,
 } from "react-native";
 import { Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,27 +21,29 @@ export const Login = ({ navigation }) => {
   const dispatch = useDispatch();
   const { isFetching, error, currentUser } = useSelector((state) => state.user);
 
+  // Passing username and password to redux
   const handleLogin = async () => {
     login(dispatch, { username, password });
     const token = await AsyncStorage.getItem("@storage_Key");
     if (token) {
       navigation.navigate("ArticleMainPage");
     } else {
+      //return error message if status isn't 200
       setErr(true);
     }
   };
 
+  // condition to set login button disabled/enabled
   const handleButton = () => {
     if (username == "" && password == "") {
-      console.log("fetna 3al handlebutton awal if");
       setDisabled(true);
-    }if (username !=="" && password !=="") {
+    }
+    if (username !== "" && password !== "") {
       setDisabled(false);
-      console.log("fetna 3al handlebutton tene if");
-
     }
   };
 
+  // call handleButton with username and password dependencies
   useEffect(() => {
     handleButton();
   }, [username, password]);
