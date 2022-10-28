@@ -21,7 +21,6 @@ export const ArticleMainPage = ({ navigation }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const dispatch = useDispatch();
 
-
   // disaptching articles from redux store
   const { error, isFetching, message, articles } = useSelector(
     (state) => state.article
@@ -38,7 +37,7 @@ export const ArticleMainPage = ({ navigation }) => {
 
   // removing token from storage on logout
   const handleLogout = async () => {
-   await AsyncStorage.removeItem("@storage_Key");
+    await AsyncStorage.removeItem("@storage_Key");
     console.log("token removed from storage");
     navigation.navigate("Login");
   };
@@ -105,20 +104,27 @@ export const ArticleMainPage = ({ navigation }) => {
                     >
                       <View style={styles.cardContainer}>
                         <View>
-                          {article.multimedia == null ? (
-                            <Image
-                              style={styles.cardImage}
-                              source={{
-                                uri: `https://static01.nyt.com/${article.multimedia}`,
-                              }}
-                              resizeMode="cover"
-                            />
-                          ) : (
+                          {article.multimedia.length === 0 ? (
                             <Image
                               style={styles.cardImage}
                               source={require("../../assets/No_Image.png")}
                               resizeMode="cover"
                             />
+                          ) : (
+                            article.multimedia.map((img, index) => {
+                              return (
+                                index === 0 && (
+                                  <Image
+                                    key={index}
+                                    style={styles.cardImage}
+                                    source={{
+                                      uri: `https://static01.nyt.com/${img.url}`,
+                                    }}
+                                    resizeMode="cover"
+                                  />
+                                )
+                              );
+                            })
                           )}
                         </View>
                         <View style={styles.contentInfo}>
@@ -177,7 +183,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   cardImage: {
-    height: 150,
+    height: 250,
     justifyContent: "space-around",
   },
   contentInfo: {

@@ -5,45 +5,51 @@ export const ArticlePage = ({ route }) => {
   // getting the props debending of the articled pressed
   const articleData = route.params.selectedArticle;
 
-
   // function trigger it if the content is HTML
-      // const formatHTML = (content) => {
-      //   const text = content.replace(/<p>/g, "").replace(/<\/p>/g, "");
-      //   return text;
-      // };
+  // const formatHTML = (content) => {
+  //   const text = content.replace(/<p>/g, "").replace(/<\/p>/g, "");
+  //   return text;
+  // };
 
   return (
-
     <ScrollView style={{ backgroundColor: "#f0f0f0" }}>
-      {articleData.multimedia==null ? (
-        <Image
-          style={styles.imageSection}
-          source={{
-            uri: `https://static01.nyt.com/${articleData.multimedia}`,
-          }}
-          resizeMode="cover"
-        />
-      ) : (
+      {articleData.multimedia.length === 0 ? (
         <Image
           style={styles.imageSection}
           source={require("../../assets/No_Image.png")}
           resizeMode="cover"
         />
+      ) : (
+        articleData.multimedia.map((img, index) => {
+          return (
+            index === 0 && (
+              <Image
+                key={index}
+                style={styles.imageSection}
+                source={{
+                  uri: `https://static01.nyt.com/${img.url}`,
+                }}
+                resizeMode="cover"
+              />
+            )
+          );
+        })
       )}
       <View style={styles.articleContainer}>
         <View>
           <Text style={styles.articleTitle}>{articleData.headline.main}</Text>
+          <Text style={styles.articleInfo}>{articleData.byline.original}</Text>
           <Text style={styles.articleInfo}>
-            {articleData.byline.original}
-          </Text>
-          <Text style={styles.articleInfo}>
-          Posted on {articleData.pub_date}
+            Posted on {articleData.pub_date}
           </Text>
         </View>
         <View style={styles.articleContent}>
           <Text style={styles.articleParagraph}>
             {/* {formatHTML(articleData.abstract)} */}
-            {articleData.lead_paragraph}
+
+            {articleData.lead_paragraph
+              ? articleData.lead_paragraph
+              : "This article is empty"}
           </Text>
         </View>
       </View>
@@ -55,9 +61,9 @@ const styles = StyleSheet.create({
   imageSection: {
     height: 250,
     borderRadius: 4,
-    borderWidth:1,
-    borderColor:"#137DC5",
-   margin:5,
+    borderWidth: 1,
+    borderColor: "#137DC5",
+    margin: 5,
   },
   articleContainer: {
     padding: 10,
@@ -82,7 +88,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: "Georgia",
     fontWeight: "normal",
-    color:"#074c7a"
+    color: "#074c7a",
     // lineHeight: 20,
   },
 });
