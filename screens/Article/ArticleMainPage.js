@@ -175,13 +175,7 @@ const styles = StyleSheet.create({
     // minWidth: 100,
   },
   SearchBar: {
-    // borderWidth: 1,
-    // borderColor: "#137DC5",
-    // borderRadius: 4,
-    // width: 200,
-    // backgroundColor: "#f1f1f1",
-    // color: "#137DC5",
-    // flex:1,
+    color: "#137DC5",
   },
   button: {
     width: 90,
