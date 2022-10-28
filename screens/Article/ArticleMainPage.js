@@ -50,14 +50,21 @@ export const ArticleMainPage = ({ navigation }) => {
   return (
     <>
       <View style={styles.TopContainer}>
-        <TextInput
-          style={styles.SearchBar}
-          placeholder="Search for an article..."
-          onChangeText={(text) => {
-            setSearchTerm(text);
-          }}
-          value={searchTerm}
-        />
+        <View style={styles.SearchContainer}>
+          <TextInput
+            style={styles.SearchBar}
+            placeholder="Search for an article..."
+            onChangeText={(text) => {
+              setSearchTerm(text);
+            }}
+            value={searchTerm}
+          />
+          <TouchableOpacity>
+            <Button title="X" onPress={() => setSearchTerm("")}>
+              X
+            </Button>
+          </TouchableOpacity>
+        </View>
         <Button
           style={styles.button}
           title="Logout"
@@ -160,13 +167,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     margin: 10,
   },
-  SearchBar: {
-    borderWidth: 1,
+  SearchContainer: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
     borderColor: "#137DC5",
-    borderRadius: 4,
-    width: 200,
-    backgroundColor: "#f1f1f1",
-    color: "#137DC5",
+    paddingBottom: 10,
+    // minWidth: 100,
+  },
+  SearchBar: {
+    // borderWidth: 1,
+    // borderColor: "#137DC5",
+    // borderRadius: 4,
+    // width: 200,
+    // backgroundColor: "#f1f1f1",
+    // color: "#137DC5",
+    // flex:1,
   },
   button: {
     width: 90,
