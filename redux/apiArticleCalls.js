@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const getArticle = async (dispatch, page) => {
   dispatch(articleFetchStart());
+  
   try {
     const response = await articleRequest.get(`/articles?page=${page}`, {
       headers: {

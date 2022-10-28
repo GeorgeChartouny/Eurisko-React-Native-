@@ -69,11 +69,8 @@ export const ArticleMainPage = ({ navigation }) => {
   useEffect(() => {
     // getArticles();
     handleGetArticles();
-  }, []);
+  }, [page]);
 
-  console.log('====================================');
-  console.log("Async Storage: " , AsyncStorage.getItem("@storage_key"));
-  console.log('====================================');
   return (
     <>
       <View style={styles.TopContainer}>
@@ -104,20 +101,20 @@ export const ArticleMainPage = ({ navigation }) => {
         <ScrollView style={{ backgroundColor: "#f0f0f0" }}>
           {articles &&
             articles
-              // .filter((article) => {
-              //   if (searchTerm == "") {
-              //     return article;
-              //   } else if (
-              //     JSON.stringify(article.headline.main)
-              //       .toLowerCase()
-              //       .includes(searchTerm.toLowerCase()) ||
-              //     JSON.stringify(article.lead_paragraph)
-              //       .toLowerCase()
-              //       .includes(searchTerm.toLowerCase())
-              //   ) {
-              //     return article;
-              //   }
-              // })
+              .filter((article) => {
+                if (searchTerm == "") {
+                  return article;
+                } else if (
+                  JSON.stringify(article.headline.main)
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()) ||
+                  JSON.stringify(article.lead_paragraph)
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+                ) {
+                  return article;
+                }
+              })
               .map((article, index) => {
                 return (
                   <View key={article._id}>
