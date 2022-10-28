@@ -6,7 +6,7 @@ import {
 import { articleRequest } from "../requestMethods";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const getArticle = async (dispatch) => {
+export const getArticle = async (dispatch, page) => {
   dispatch(articleFetchStart());
   try {
     const response = await articleRequest.get(`/articles?page=${page}`, {
@@ -19,7 +19,7 @@ export const getArticle = async (dispatch) => {
       console.log("article fetched successfully");
     }
   } catch (e) {
-    dispatch(articleFetchFailure(error.response.message));
+    dispatch(articleFetchFailure(e.response));
     console.log("Catching error in fetching article: ", e);
   }
 };

@@ -13,12 +13,16 @@ import {
 import { articleRequest } from "../../requestMethods";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "react-native-paper";
+import { getArticle } from "../../redux/apiArticleCalls";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export const ArticleMainPage = ({ navigation }) => {
-  const [articles, setArticles] = useState([]);
-  const [isFetching, setIsFetching] = useState(true);
+  // const [articles, setArticles] = useState([]);
+  // const [isFetching, setIsFetching] = useState(true);
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const dispatch = useDispatch();
 
   // fetching articles from API and passing the token in headers
   const getArticles = async () => {
@@ -41,16 +45,35 @@ export const ArticleMainPage = ({ navigation }) => {
     }
   };
 
+  // disaptching articles from redux store
+  const { error, isFetching, message, articles } = useSelector(
+    (state) => state.article
+  );
+  const handleGetArticles = async () => {
+    try {
+      await AsyncStorage.getItem("@storage_Key");
+      await getArticle(dispatch, page);
+      console.log("dispatching articles from storage");
+    } catch (e) {
+      console.log("Error fetching articles from storage: ", e);
+    }
+  };
+
   // removing token from storage on logout
   const handleLogout = async () => {
-    AsyncStorage.clear();
+   await AsyncStorage.removeItem("@storage_Key");
+    console.log("token removed from storage");
     navigation.navigate("Login");
   };
 
   useEffect(() => {
-    getArticles();
+    // getArticles();
+    handleGetArticles();
   }, []);
 
+  console.log('====================================');
+  console.log("Async Storage: " , AsyncStorage.getItem("@storage_key"));
+  console.log('====================================');
   return (
     <>
       <View style={styles.TopContainer}>
@@ -79,70 +102,70 @@ export const ArticleMainPage = ({ navigation }) => {
         />
       ) : (
         <ScrollView style={{ backgroundColor: "#f0f0f0" }}>
-          {articles
-            .filter((article) => {
-              if (searchTerm == "") {
-                return article;
-              } else if (
-                JSON.stringify(article.headline.main)
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase())
-                  ||
-                  JSON.stringify(article.lead_paragraph)
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase())
-              ) {
-                return article;
-              }
-            })
-            .map((article, index) => {
-              return (
-                <View key={article._id}>
-                  <TouchableOpacity
-                    activeOpacity={0.7}
-                    key={index}
-                    onPress={() =>
-                      navigation.navigate("ArticlePage", {
-                        selectedArticle: article,
-                      })
-                    }
-                  >
-                    <View style={styles.cardContainer}>
-                      <View>
-                        {article.multimedia == null ? (
-                          <Image
-                            style={styles.cardImage}
-                            source={{
-                              uri: `https://static01.nyt.com/${article.multimedia}`,
-                            }}
-                            resizeMode="cover"
-                          />
-                        ) : (
-                          <Image
-                            style={styles.cardImage}
-                            source={require("../../assets/No_Image.png")}
-                            resizeMode="cover"
-                          />
-                        )}
-                      </View>
-                      <View style={styles.contentInfo}>
-                        <Text style={styles.titleMain}>
-                          {article.headline.main}
-                        </Text>
-                        <View style={styles.bottomCard}>
-                          <Text style={styles.publisherName}>
-                            {article.byline.original} -
+          {articles &&
+            articles
+              // .filter((article) => {
+              //   if (searchTerm == "") {
+              //     return article;
+              //   } else if (
+              //     JSON.stringify(article.headline.main)
+              //       .toLowerCase()
+              //       .includes(searchTerm.toLowerCase()) ||
+              //     JSON.stringify(article.lead_paragraph)
+              //       .toLowerCase()
+              //       .includes(searchTerm.toLowerCase())
+              //   ) {
+              //     return article;
+              //   }
+              // })
+              .map((article, index) => {
+                return (
+                  <View key={article._id}>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      key={index}
+                      onPress={() =>
+                        navigation.navigate("ArticlePage", {
+                          selectedArticle: article,
+                        })
+                      }
+                    >
+                      <View style={styles.cardContainer}>
+                        <View>
+                          {article.multimedia == null ? (
+                            <Image
+                              style={styles.cardImage}
+                              source={{
+                                uri: `https://static01.nyt.com/${article.multimedia}`,
+                              }}
+                              resizeMode="cover"
+                            />
+                          ) : (
+                            <Image
+                              style={styles.cardImage}
+                              source={require("../../assets/No_Image.png")}
+                              resizeMode="cover"
+                            />
+                          )}
+                        </View>
+                        <View style={styles.contentInfo}>
+                          <Text style={styles.titleMain}>
+                            {article.headline.main}
                           </Text>
-                          <Text style={styles.publishDate}>
-                            Published on {article.pub_date}
-                          </Text>
+                          <View style={styles.bottomCard}>
+                            <Text style={styles.publisherName}>
+                              {article.byline.original} -
+                            </Text>
+                            <Text style={styles.publishDate}>
+                              Published on {article.pub_date}
+                            </Text>
+                          </View>
                         </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              );
-            })}
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
         </ScrollView>
       )}
     </>

@@ -11,8 +11,8 @@ import {
 import { Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/apiLoginCalls";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { loginSuccess } from "../../redux/userRedux";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 export const Login = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -41,10 +41,6 @@ export const Login = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    handleButton();
-  }, []);
-
   // condition to set login button disabled/enabled
   const handleButton = () => {
     if ((username == "" && password == "")|| isFetching) {
@@ -58,7 +54,7 @@ export const Login = ({ navigation }) => {
   // call handleButton with username and password dependencies
   useEffect(() => {
     handleButton();
-  }, [username, password]);
+  }, [username, password, isFetching]);
 
   return (
     <>
