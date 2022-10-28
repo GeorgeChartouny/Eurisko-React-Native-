@@ -144,7 +144,7 @@ export const ArticleMainPage = ({ navigation }) => {
                               {article.byline.original} -
                             </Text>
                             <Text style={styles.publishDate}>
-                              Published on {article.pub_date}
+                              Published on {JSON.stringify(article.pub_date).slice(1,11)}
                             </Text>
                           </View>
                         </View>
