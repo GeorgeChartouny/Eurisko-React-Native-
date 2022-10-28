@@ -147,6 +147,7 @@ export const ArticleMainPage = ({ navigation }) => {
               })}
         </ScrollView>
       )}
+      {error && <Text style={styles.ErrorMessage}> {message}</Text>}
     </>
   );
 };
@@ -211,5 +212,12 @@ const styles = StyleSheet.create({
   publishDate: {
     color: "#828282",
     fontSize: 12,
+  },
+  ErrorMessage: {
+    color: "red",
+    fontSize: 30,
+    display: "flex",
+    alignContent: "center",
+    justifyContent: "center",
   },
 });
