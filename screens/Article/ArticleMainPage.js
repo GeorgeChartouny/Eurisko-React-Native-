@@ -9,9 +9,10 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Button,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Button } from "react-native-paper";
+// import { Button } from "react-native-paper";
 import { getArticle } from "../../redux/apiArticleCalls";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -157,14 +158,13 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 10,
-    marginBottom: 10,
+    margin: 10,
   },
   SearchBar: {
     borderWidth: 1,
     borderColor: "#137DC5",
     borderRadius: 4,
-    width: 150,
+    width: 200,
     backgroundColor: "#f1f1f1",
     color: "#137DC5",
   },
@@ -172,7 +172,6 @@ const styles = StyleSheet.create({
     width: 90,
     backgroundColor: "#137DC5",
     opacity: 0.6,
-
     borderRadius: 4,
   },
   cardContainer: {
