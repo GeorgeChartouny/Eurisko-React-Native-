@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { articleRequest } from "../../requestMethods";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "react-native-paper";
 import { getArticle } from "../../redux/apiArticleCalls";
@@ -18,32 +17,10 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
 export const ArticleMainPage = ({ navigation }) => {
-  // const [articles, setArticles] = useState([]);
-  // const [isFetching, setIsFetching] = useState(true);
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const dispatch = useDispatch();
 
-  // fetching articles from API and passing the token in headers
-  const getArticles = async () => {
-    try {
-      const response = await articleRequest
-        .get(`/articles?page=${page}`, {
-          headers: {
-            Authorization: `Bearer ${await AsyncStorage.getItem(
-              "@storage_Key"
-            )}`,
-          },
-        })
-        .then((res) => {
-          setArticles(res.data.response.docs);
-          setIsFetching(false);
-        });
-    } catch (e) {
-      console.log("Error fetching articles: ", e);
-      navigation.navigate("Login");
-    }
-  };
 
   // disaptching articles from redux store
   const { error, isFetching, message, articles } = useSelector(
@@ -67,7 +44,6 @@ export const ArticleMainPage = ({ navigation }) => {
   };
 
   useEffect(() => {
-    // getArticles();
     handleGetArticles();
   }, [page]);
 

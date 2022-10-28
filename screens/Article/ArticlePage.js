@@ -34,11 +34,14 @@ export const ArticlePage = ({ route }) => {
         <View>
           <Text style={styles.articleTitle}>{articleData.headline.main}</Text>
           <Text style={styles.articleInfo}>
-            {articleData.byline.original} - Posted on {articleData.pub_date}
+            {articleData.byline.original}
+          </Text>
+          <Text style={styles.articleInfo}>
+          Posted on {articleData.pub_date}
           </Text>
         </View>
         <View style={styles.articleContent}>
-          <Text style={styles.articleAbstract}>
+          <Text style={styles.articleParagraph}>
             {/* {formatHTML(articleData.abstract)} */}
             {articleData.lead_paragraph}
           </Text>
@@ -52,30 +55,34 @@ const styles = StyleSheet.create({
   imageSection: {
     height: 250,
     borderRadius: 4,
+    borderWidth:1,
+    borderColor:"#137DC5",
+   margin:5,
   },
   articleContainer: {
     padding: 10,
   },
   articleTitle: {
-    fontSize: 23,
-    color: "#323232",
+    fontSize: 25,
+    color: "#137DC5",
     fontFamily: "Times New Roman",
     fontWeight: "600",
   },
   articleInfo: {
-    fontSize: 12,
+    fontSize: 20,
     color: "#828282",
-    fontFamily: "Times New Roman",
+    fontFamily: "Helvetica",
     fontWeight: "100",
   },
 
   articleContent: {
     marginTop: 30,
   },
-  articleAbstract: {
-    fontSize: 16,
-    fontFamily: "Times New Roman",
-    fontWeight: "200",
-    lineHeight: 20,
+  articleParagraph: {
+    fontSize: 30,
+    fontFamily: "Georgia",
+    fontWeight: "normal",
+    color:"#074c7a"
+    // lineHeight: 20,
   },
 });
