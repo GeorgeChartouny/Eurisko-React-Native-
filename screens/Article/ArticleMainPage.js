@@ -141,10 +141,10 @@ export const ArticleMainPage = ({ navigation }) => {
                           </Text>
                           <View style={styles.bottomCard}>
                             <Text style={styles.publisherName}>
-                              {article.byline.original} -
+                              {article.byline.original ? article.byline.original : "Name Not Available"}  
                             </Text>
                             <Text style={styles.publishDate}>
-                              Published on {JSON.stringify(article.pub_date).slice(1,11)}
+                             - Published on {JSON.stringify(article.pub_date).slice(1,11)}
                             </Text>
                           </View>
                         </View>

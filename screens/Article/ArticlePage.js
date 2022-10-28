@@ -40,7 +40,7 @@ export const ArticlePage = ({ route }) => {
           <Text style={styles.articleTitle}>{articleData.headline.main}</Text>
           <Text style={styles.articleInfo}>{articleData.byline.original}</Text>
           <Text style={styles.articleInfo}>
-            Posted on {articleData.pub_date}
+          Published on {JSON.stringify(articleData.pub_date).slice(1,11)}
           </Text>
         </View>
         <View style={styles.articleContent}>
