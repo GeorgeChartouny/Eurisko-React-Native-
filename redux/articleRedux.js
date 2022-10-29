@@ -8,7 +8,6 @@ const articleSlice = createSlice({
     isFetching: false,
     message: null,
     articles: null,
-    page: 0,
   },
 
   //reducers triggered depending on the state

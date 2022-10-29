@@ -44,7 +44,7 @@ export const ArticleCardComponent = ({ searchTerm }) => {
       setArticlesData([...articlesData, ...articles]); // spread operators
       console.log("dispatching articles from storage");
     } catch (e) {
-      console.log("Error fetching articles from storage: ", e.response);
+      console.log("Error fetching articles from storage: ", e);
       navigation.navigate("Login");
     }
   };

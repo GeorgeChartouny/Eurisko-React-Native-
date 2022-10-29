@@ -50,6 +50,6 @@ export const login = async (dispatch, user) => {
     // trigger loginFailure from redux
     dispatch(loginFailure(error.response.data.message));
     console.log("catch error ");
-    console.log("Error: ", error);
+    console.log("Error: ", error.response.data.message);
   }
 };

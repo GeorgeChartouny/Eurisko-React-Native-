@@ -13,11 +13,7 @@ import {
 import { Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/apiLoginCalls";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-
-// import styles from "./styles"
 import Svg, { Image, Ellipse, ClipPath } from "react-native-svg";
-const { height, width } = Dimensions.get("window");
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -26,10 +22,12 @@ import Animated, {
   withDelay,
 } from "react-native-reanimated";
 
+const { height, width } = Dimensions.get("window");
 export const Login = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  // const [err, setErr] = useState(false);
+  const [err, setErr] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const imagePosition = useSharedValue(1);
   const [disabled, setDisabled] = useState(true);
   const dispatch = useDispatch();
@@ -81,16 +79,22 @@ export const Login = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       await login(dispatch, { username, password });
-      if (!message) {
+      if (!message && !error) {
         navigation.navigate("ArticleMainPage");
+        setErr(false);
         console.log("login success");
       }
-      if (message) {
-        console.log("message!!!", message);
+      if (error && message) {
+        console.log("message!!! ", message);
+        setErr(true);
+        setErrorMessage(message);
       }
     } catch (e) {
       console.log("Error logging in!");
       console.log("catch error logging in: ", e);
+      setErr(true);
+      setErrorMessage(e.response.message)
+      console.log("message catch error loggin: " , e.response.message);
     }
   };
 
@@ -175,7 +179,7 @@ export const Login = ({ navigation }) => {
           </View>
         </Animated.View>
       )}
-      {  error && <Text style={styles.ErrorMessage}>{message}</Text>}
+      {  err  && <Text style={styles.ErrorMessage}>{errorMessage}</Text>}
     </>
   );
 };
