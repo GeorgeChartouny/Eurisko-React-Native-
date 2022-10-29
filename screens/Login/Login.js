@@ -42,7 +42,7 @@ export const Login = ({ navigation }) => {
     const interpolation = interpolate(
       imagePosition.value,
       [0, 1],
-      [-height +50, 0]
+      [-height + 50, 0]
     );
     return {
       transform: [
@@ -62,7 +62,6 @@ export const Login = ({ navigation }) => {
     };
   });
 
-
   const formAnimatedStyle = useAnimatedStyle(() => {
     return {
       opacity:
@@ -71,7 +70,7 @@ export const Login = ({ navigation }) => {
           : withTiming(0, { duration: 300 }),
     };
   });
-  
+
   // change image position once the login button is clicked
   const loginStyleHandler = () => {
     imagePosition.value = 0;
@@ -136,11 +135,6 @@ export const Login = ({ navigation }) => {
                 clipPath="url(#clipPathId)"
               />
             </Svg>
-            {/* <Animated.View
-              style={[styles.closeButtonContainer, closeButtonContainerStyle]}
-            >
-              <Text onPress={() => (imagePosition.value = 1)}>X</Text>
-            </Animated.View> */}
           </Animated.View>
 
           <View style={styles.bottomContainer}>
@@ -154,8 +148,6 @@ export const Login = ({ navigation }) => {
             </Animated.View>
 
             <Animated.View style={[styles.formContainer, formAnimatedStyle]}>
-        
-
               <TextInput
                 placeholder="Enter your username"
                 value={username}
@@ -179,46 +171,23 @@ export const Login = ({ navigation }) => {
               >
                 LOGIN
               </Button>
-        
             </Animated.View>
-            
           </View>
-          {error && <Text style={styles.ErrorMessage}>
-            {message}
-            
-          </Text>}
         </Animated.View>
-
-     
-
- 
-      
       )}
+      {  error && <Text style={styles.ErrorMessage}>{message}</Text>}
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  //   container: {
-  //     flex: 1,
-  //     backgroundColor: "#fff",
-  //     alignItems: "center",
-  //     paddingTop: 60,
-  //   },
-  //   imageSize: {
-  //     width: 250,
-  //     height: 200,
-  //   },
-
-    ErrorMessage: {
-    
-      color: "red",
-      position:"absolute",
-      zIndex:1,
-      fontSize:20,
-      paddingBottom:250,
-      margin:50,
-    },
+  ErrorMessage: {
+    color: "red",
+    position: "absolute",
+    fontSize: 20,
+    paddingBottom: 250,
+    margin: 50,
+  },
 
   container: {
     flex: 1,
@@ -269,7 +238,7 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     justifyContent: "center",
-    height: height /3,
+    height: height / 3,
   },
   input: {
     // margin: 10,
@@ -300,8 +269,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   formContainer: {
-    marginBottom: height-90,
+    marginBottom: height - 90,
     zIndex: -1,
-    justifyContent:"center"
+    justifyContent: "center",
   },
 });

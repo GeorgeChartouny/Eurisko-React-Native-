@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   View,
   FlatList,
-
   RefreshControl,
 } from "react-native";
 import { useSelector } from "react-redux";
@@ -18,9 +17,9 @@ import { getArticle } from "../../redux/apiArticleCalls";
 import { useNavigation } from "@react-navigation/native";
 
 const wait = (timeout) => {
-    return new Promise((resolve) => setTimeout(resolve, timeout));
-  };
-  
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
+
 export const ArticleCardComponent = ({ searchTerm }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
@@ -46,6 +45,7 @@ export const ArticleCardComponent = ({ searchTerm }) => {
       console.log("dispatching articles from storage");
     } catch (e) {
       console.log("Error fetching articles from storage: ", e.response);
+      navigation.navigate("Login");
     }
   };
 
