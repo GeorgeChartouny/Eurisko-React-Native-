@@ -32,11 +32,6 @@ const articleSlice = createSlice({
       state.error = true;
       state.message = action.payload;
     },
-    articlePage: (state, action) => {
-      state.error = false;
-      state.isFetching = false;
-      state.page = action.payload;
-    },
   },
 });
 

@@ -1,5 +1,5 @@
 import React from "react";
-import {  useState } from "react";
+import { useState } from "react";
 import {
   StyleSheet,
   TextInput,
@@ -9,29 +9,21 @@ import {
   SafeAreaView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 import { ArticleCardComponent } from "./ArticleCardComponent";
-
-const wait = (timeout) => {
-  return new Promise((resolve) => setTimeout(resolve, timeout));
-};
 
 export const ArticleMainPage = ({ navigation }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
-
- 
-  // disaptching articles from redux store
-  const { error, isFetching, message } = useSelector((state) => state.article);
-
   // removing token from storage on logout
   const handleLogout = async () => {
     // await AsyncStorage.removeItem("@storage_Key");
-    await AsyncStorage.clear();
-    console.log("token removed from storage");
-    navigation.navigate("Login");
-    set;
+    try {
+      await AsyncStorage.removeItem("@storage_Key");
+      console.log("token removed from storage");
+      navigation.navigate("Login");
+    } catch (e) {
+      console.log("Cannot logout");
+    }
   };
 
   return (
@@ -63,9 +55,7 @@ export const ArticleMainPage = ({ navigation }) => {
       </View>
 
       <>
-        <ArticleCardComponent
-          searchTerm={searchTerm.toLowerCase()}
-        />
+        <ArticleCardComponent searchTerm={searchTerm.toLowerCase()} />
       </>
     </SafeAreaView>
   );

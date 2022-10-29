@@ -17,6 +17,10 @@ import { useDispatch } from "react-redux";
 import { getArticle } from "../../redux/apiArticleCalls";
 import { useNavigation } from "@react-navigation/native";
 
+const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
+  
 export const ArticleCardComponent = ({ searchTerm }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
@@ -27,9 +31,12 @@ export const ArticleCardComponent = ({ searchTerm }) => {
   const [articlesData, setArticlesData] = useState([]);
 
   const dispatch = useDispatch();
+
+  // disaptching articles from redux store
   const { error, isFetching, message, articles } = useSelector(
     (state) => state.article
   );
+
   // dispatch getArticle from redux
   const handleGetArticles = async () => {
     try {
