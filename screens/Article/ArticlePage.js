@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   articleParagraph: {
-    fontSize: 30,
+    fontSize: 25,
     fontFamily: "Georgia",
     fontWeight: "normal",
     color: "#074c7a",
