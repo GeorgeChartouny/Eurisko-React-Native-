@@ -13,10 +13,8 @@ import {
   FlatList,
   SafeAreaView,
   RefreshControl,
-  LogBox,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { Button } from "react-native-paper";
 import { getArticle } from "../../redux/apiArticleCalls";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -36,7 +34,7 @@ export const ArticleMainPage = ({ navigation }) => {
   );
 
   const [articlesData, setArticlesData] = useState([]);
-
+  // dispatch getArticle from redux
   const handleGetArticles = async () => {
     try {
       await AsyncStorage.getItem("@storage_Key");
@@ -50,21 +48,18 @@ export const ArticleMainPage = ({ navigation }) => {
 
   // removing token from storage on logout
   const handleLogout = async () => {
-    await AsyncStorage.removeItem("@storage_Key");
+    // await AsyncStorage.removeItem("@storage_Key");
+    await AsyncStorage.clear();
     console.log("token removed from storage");
     navigation.navigate("Login");
     set;
   };
-
-  console.log("articles data: ", articlesData.length);
-  // console.log("articles data: " , articlesData);
 
   const renderItem = ({ item, index }) => {
     return (
       <View key={index}>
         <TouchableOpacity
           activeOpacity={0.7}
-          // key={index}
           onPress={() =>
             navigation.navigate("ArticlePage", { selectedArticle: item })
           }
@@ -117,9 +112,6 @@ export const ArticleMainPage = ({ navigation }) => {
   useEffect(() => {
     handleGetArticles();
   }, [page]);
-  useEffect(() => {
-    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
-  }, []);
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -129,84 +121,75 @@ export const ArticleMainPage = ({ navigation }) => {
   }, []);
 
   return (
-    <>
-      <SafeAreaView style={styles.container}>
-        <ScrollView
-          contentContainerStyle={styles.scrollView}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        >
-          <Text>Pull down to batata</Text>
-
-          <View style={styles.TopContainer}>
-            <View style={styles.SearchContainer}>
-              <TextInput
-                style={styles.SearchBar}
-                placeholder="Search for an article..."
-                onChangeText={(text) => {
-                  setSearchTerm(text);
-                }}
-                value={searchTerm}
-              />
-              <TouchableOpacity>
-                <Button title="X" onPress={() => setSearchTerm("")}>
-                  X
-                </Button>
-              </TouchableOpacity>
-            </View>
-            <Button
-              style={styles.button}
-              title="Logout"
-              mode="contained"
-              onPress={() => handleLogout()}
-            >
-              Logout
+    <SafeAreaView>
+      <View style={styles.TopContainer}>
+        <View style={styles.SearchContainer}>
+          <TextInput
+            style={styles.SearchBar}
+            placeholder="Search for an article..."
+            onChangeText={(text) => {
+              setSearchTerm(text);
+            }}
+            value={searchTerm}
+          />
+          <TouchableOpacity>
+            <Button title="X" onPress={() => setSearchTerm("")}>
+              X
             </Button>
-          </View>
-          {isFetching ? (
-            <ActivityIndicator
-              color="#137DC5"
-              size="large"
-              style={{
-                flex: 1,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            />
-          ) : (
-            <>
-              <FlatList
-                onEndReachedThreshold={0}
-                data={
-                  articlesData &&
-                  articlesData.filter((article) => {
-                    if (searchTerm == "") {
-                      return article;
-                    } else if (
-                      JSON.stringify(article.headline.main)
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase()) ||
-                      JSON.stringify(article.lead_paragraph)
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase())
-                    ) {
-                      return article;
-                    }
-                  })
+          </TouchableOpacity>
+        </View>
+        <Button
+          style={styles.button}
+          title="Logout"
+          mode="contained"
+          onPress={() => handleLogout()}
+        >
+          Logout
+        </Button>
+      </View>
+      {isFetching ? (
+        <ActivityIndicator
+          color="#137DC5"
+          size="large"
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        />
+      ) : (
+        <>
+          <FlatList
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            onEndReachedThreshold={0}
+            data={
+              articlesData &&
+              articlesData.filter((article) => {
+                if (searchTerm == "") {
+                  return article;
+                } else if (
+                  JSON.stringify(article.headline.main)
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()) ||
+                  JSON.stringify(article.lead_paragraph)
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+                ) {
+                  return article;
                 }
-                renderItem={renderItem}
-                onEndReached={() =>
-                  searchTerm == "" ? setPage(page == 2 ? page : page + 1) : null
-                }
-                // keyExtractor={(item) => item._id}
-              />
-            </>
-          )}
-          {error && <Text style={styles.ErrorMessage}> {message}</Text>}
-        </ScrollView>
-      </SafeAreaView>
-    </>
+              })
+            }
+            renderItem={renderItem}
+            onEndReached={() =>
+              searchTerm == "" ? setPage(page == 2 ? page : page + 1) : null
+            }
+          />
+        </>
+      )}
+      {error && <Text style={styles.ErrorMessage}> {message}</Text>}
+    </SafeAreaView>
   );
 };
 
@@ -222,7 +205,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "#137DC5",
     paddingBottom: 10,
-    // minWidth: 100,
   },
   SearchBar: {
     color: "#137DC5",
