@@ -1,50 +1,29 @@
-import React, { useCallback } from "react";
-import { useEffect, useState } from "react";
+import React from "react";
+import {  useState } from "react";
 import {
-  ActivityIndicator,
-  Image,
-  ScrollView,
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
   Button,
-  FlatList,
   SafeAreaView,
-  RefreshControl,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getArticle } from "../../redux/apiArticleCalls";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { ArticleCardComponent } from "./ArticleCardComponent";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
 export const ArticleMainPage = ({ navigation }) => {
-  const [page, setPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
-  const dispatch = useDispatch();
 
+
+ 
   // disaptching articles from redux store
-  const { error, isFetching, message, articles } = useSelector(
-    (state) => state.article
-  );
-
-  const [articlesData, setArticlesData] = useState([]);
-  // dispatch getArticle from redux
-  const handleGetArticles = async () => {
-    try {
-      await AsyncStorage.getItem("@storage_Key");
-      await getArticle(dispatch, page);
-      setArticlesData([...articlesData, ...articles]); // spread operators
-      console.log("dispatching articles from storage");
-    } catch (e) {
-      console.log("Error fetching articles from storage: ", e);
-    }
-  };
+  const { error, isFetching, message } = useSelector((state) => state.article);
 
   // removing token from storage on logout
   const handleLogout = async () => {
@@ -54,71 +33,6 @@ export const ArticleMainPage = ({ navigation }) => {
     navigation.navigate("Login");
     set;
   };
-
-  const renderItem = ({ item, index }) => {
-    return (
-      <View key={index}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() =>
-            navigation.navigate("ArticlePage", { selectedArticle: item })
-          }
-        >
-          <View style={styles.cardContainer}>
-            <View>
-              {item.multimedia.length === 0 ? (
-                <Image
-                  style={styles.cardImage}
-                  source={require("../../assets/No_Image.png")}
-                  resizeMode="cover"
-                />
-              ) : (
-                item.multimedia.map((img, index) => {
-                  return (
-                    index === 0 && (
-                      <Image
-                        key={index}
-                        style={styles.cardImage}
-                        source={{
-                          uri: `https://static01.nyt.com/${img.url}`,
-                        }}
-                        resizeMode="cover"
-                      />
-                    )
-                  );
-                })
-              )}
-            </View>
-            <View style={styles.contentInfo}>
-              <Text style={styles.titleMain}>{item.headline.main}</Text>
-              <View style={styles.bottomCard}>
-                <Text style={styles.publisherName}>
-                  {item.byline.original
-                    ? item.byline.original
-                    : "Name Not Available"}
-                </Text>
-                <Text style={styles.publishDate}>
-                  {" "}
-                  - Published On {JSON.stringify(item.pub_date).slice(1, 11)}
-                </Text>
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
-  useEffect(() => {
-    handleGetArticles();
-  }, [page]);
-
-  const [refreshing, setRefreshing] = useState(false);
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
 
   return (
     <SafeAreaView>
@@ -147,48 +61,12 @@ export const ArticleMainPage = ({ navigation }) => {
           Logout
         </Button>
       </View>
-      {isFetching ? (
-        <ActivityIndicator
-          color="#137DC5"
-          size="large"
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+
+      <>
+        <ArticleCardComponent
+          searchTerm={searchTerm.toLowerCase()}
         />
-      ) : (
-        <>
-          <FlatList
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            onEndReachedThreshold={0}
-            data={
-              articlesData &&
-              articlesData.filter((article) => {
-                if (searchTerm == "") {
-                  return article;
-                } else if (
-                  JSON.stringify(article.headline.main)
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  JSON.stringify(article.lead_paragraph)
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase())
-                ) {
-                  return article;
-                }
-              })
-            }
-            renderItem={renderItem}
-            onEndReached={() =>
-              searchTerm == "" ? setPage(page == 2 ? page : page + 1) : null
-            }
-          />
-        </>
-      )}
-      {error && <Text style={styles.ErrorMessage}> {message}</Text>}
+      </>
     </SafeAreaView>
   );
 };
@@ -214,50 +92,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#137DC5",
     opacity: 0.6,
     borderRadius: 4,
-  },
-  cardContainer: {
-    backgroundColor: "#fff",
-    margin: 10,
-    shadowColor: "#dddddd",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-  },
-  cardImage: {
-    height: 250,
-    justifyContent: "space-around",
-  },
-  contentInfo: {
-    borderWidth: 1,
-    borderColor: "#dddddd",
-  },
-  titleMain: {
-    color: "#137DC5",
-    fontSize: 16,
-    padding: 10,
-  },
-
-  bottomCard: {
-    flex: 1,
-    flexDirection: "row",
-    borderTopWidth: 1,
-    borderTopColor: "#e6e6e6",
-    padding: 10,
-  },
-
-  publisherName: {
-    color: "#828282",
-    fontSize: 12,
-  },
-  publishDate: {
-    color: "#828282",
-    fontSize: 12,
-  },
-  ErrorMessage: {
-    color: "red",
-    fontSize: 30,
-    display: "flex",
-    alignContent: "center",
-    justifyContent: "center",
   },
 });
