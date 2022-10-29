@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Text,
   Dimensions,
+  Pressable,
 } from "react-native";
 import { Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,19 +16,67 @@ import { login } from "../../redux/apiLoginCalls";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // import styles from "./styles"
-import Svg, { Image } from "react-native-svg";
+import Svg, { Image, Ellipse, ClipPath } from "react-native-svg";
 const { height, width } = Dimensions.get("window");
-import Animated from "react-native-reanimated";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  interpolate,
+  withTiming,
+  withDelay,
+} from "react-native-reanimated";
 
 export const Login = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   // const [err, setErr] = useState(false);
+  const imagePosition = useSharedValue(1);
   const [disabled, setDisabled] = useState(true);
   const dispatch = useDispatch();
   const { isFetching, error, message, currentUser } = useSelector(
     (state) => state.user
   );
+
+  // animation with condition to scale up the background to -height+50 on duration 1s
+  const imageAnimatedStyle = useAnimatedStyle(() => {
+    const interpolation = interpolate(
+      imagePosition.value,
+      [0, 1],
+      [-height +50, 0]
+    );
+    return {
+      transform: [
+        { translateY: withTiming(interpolation, { duration: 1000 }) },
+      ],
+    };
+  });
+
+  // on click with depending value, change the opacity with duration 0.5s and let the button scale down in 1s
+  const buttonAnimetedStyle = useAnimatedStyle(() => {
+    const interpolation = interpolate(imagePosition.value, [0, 1], [250, 0]);
+    return {
+      opacity: withTiming(imagePosition.value, { duration: 500 }),
+      transform: [
+        { translateY: withTiming(interpolation, { duration: 1000 }) },
+      ],
+    };
+  });
+
+
+  const formAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity:
+        imagePosition.value === 0
+          ? withDelay(400, withTiming(1, { duration: 800 }))
+          : withTiming(0, { duration: 300 }),
+    };
+  });
+  
+  // change image position once the login button is clicked
+  const loginStyleHandler = () => {
+    imagePosition.value = 0;
+    console.log("login pressed");
+  };
 
   // Passing username and password to redux
   const handleLogin = async () => {
@@ -72,34 +121,47 @@ export const Login = ({ navigation }) => {
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         />
       ) : (
-        <View style={styles.container}>
-          <Animated.View style={styles.absoluteContainer}>
-            <Svg height={height } width={width}>
+        <Animated.View style={styles.container}>
+          <Animated.View style={[styles.absoluteContainer, imageAnimatedStyle]}>
+            <Svg height={height + 100} width={width}>
+              <ClipPath id="clipPathId">
+                <Ellipse cx={width / 2} rx={height} ry={height + 100} />
+              </ClipPath>
               <Image
                 // source={require("../../assets/background.png")}
                 href={require("../../assets/background.png")}
-                width={width}
-                height={height}
+                width={width + 100}
+                height={height + 100}
                 preserveAspectRatio="xMidYMid slice"
+                clipPath="url(#clipPathId)"
               />
             </Svg>
-            <View style={styles.closeButtomContainer}>
-              <Text>X</Text>
-            </View>
+            {/* <Animated.View
+              style={[styles.closeButtonContainer, closeButtonContainerStyle]}
+            >
+              <Text onPress={() => (imagePosition.value = 1)}>X</Text>
+            </Animated.View> */}
           </Animated.View>
 
           <View style={styles.bottomContainer}>
-            <View style={styles.buttonContainer}>
-              <Text style={styles.buttonLogin}>LOGIN</Text>
-            </View>
+            <Animated.View style={buttonAnimetedStyle}>
+              <Pressable
+                style={styles.buttonContainer}
+                onPress={loginStyleHandler}
+              >
+                <Text style={styles.buttonLogin}>LOGIN</Text>
+              </Pressable>
+            </Animated.View>
 
+            <Animated.View style={[styles.formContainer, formAnimatedStyle]}>
+        
 
-            {/* <View style={styles.formContainer}>
               <TextInput
                 placeholder="Enter your username"
                 value={username}
                 onChangeText={setUsername}
                 style={styles.input}
+                secureTextEntry={false}
               />
               <TextInput
                 placeholder="Enter your password"
@@ -117,30 +179,20 @@ export const Login = ({ navigation }) => {
               >
                 LOGIN
               </Button>
-            </View> */}
-
-
+        
+            </Animated.View>
+            
           </View>
-        </View>
+          {error && <Text style={styles.ErrorMessage}>
+            {message}
+            
+          </Text>}
+        </Animated.View>
 
-        // <View style={styles.container}>
-        //   <Image
-        //     source={require("../../assets/eurisko.jpg")}
-        //     style={styles.imageSize}
-        //   />
+     
 
-        //   <Button
-        //     mode="contained"
-        //     style={styles.button}
-        //     title="Login"
-        //     onPress={() => handleLogin()}
-        //     disabled={disabled}
-        //   >
-        //     Login
-        //   </Button>
-        //   {error && <Text style={styles.ErrorMessage}>{message}</Text>}
-        //   <StatusBar style="auto" />
-        // </View>
+ 
+      
       )}
     </>
   );
@@ -158,9 +210,15 @@ const styles = StyleSheet.create({
   //     height: 200,
   //   },
 
-  //   ErrorMessage: {
-  //     color: "red",
-  //   },
+    ErrorMessage: {
+    
+      color: "red",
+      position:"absolute",
+      zIndex:1,
+      fontSize:20,
+      paddingBottom:250,
+      margin:50,
+    },
 
   container: {
     flex: 1,
@@ -173,7 +231,7 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
   },
-  closeButtomContainer: {
+  closeButtonContainer: {
     height: 40,
     width: 40,
     justifyContent: "center",
@@ -189,6 +247,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     alignItems: "center",
     borderRadius: 20,
+    top: -20,
   },
   buttonContainer: {
     backgroundColor: "#137DC5",
@@ -210,7 +269,7 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     justifyContent: "center",
-    height: height / 3,
+    height: height /3,
   },
   input: {
     // margin: 10,
@@ -241,6 +300,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   formContainer: {
-    marginBottom: 70,
+    marginBottom: height-90,
+    zIndex: -1,
+    justifyContent:"center"
   },
 });
