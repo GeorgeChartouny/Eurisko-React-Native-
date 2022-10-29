@@ -156,25 +156,27 @@ export const ArticleMainPage = ({ navigation }) => {
         <>
           <FlatList
             onEndReachedThreshold={0}
-            data= {articlesData &&
-              articlesData
-                .filter((article) => {
-                  if (searchTerm == "") {
-                    return article;
-                  } else if (
-                    JSON.stringify(article.headline.main)
-                      .toLowerCase()
-                      .includes(searchTerm.toLowerCase()) ||
-                    JSON.stringify(article.lead_paragraph)
-                      .toLowerCase()
-                      .includes(searchTerm.toLowerCase())
-                  ) {
-                    return article;
-                  }
-                })
-              }
+            data={
+              articlesData &&
+              articlesData.filter((article) => {
+                if (searchTerm == "") {
+                  return article;
+                } else if (
+                  JSON.stringify(article.headline.main)
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()) ||
+                  JSON.stringify(article.lead_paragraph)
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+                ) {
+                  return article;
+                }
+              })
+            }
             renderItem={renderItem}
-            onEndReached={() => setPage(page == 2 ? page : page + 1)}
+            onEndReached={() =>
+              searchTerm == "" ? setPage(page == 2 ? page : page + 1) : null
+            }
             // keyExtractor={(item) => item._id}
           />
 
