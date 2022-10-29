@@ -6,7 +6,7 @@ const articleSlice = createSlice({
   initialState: {
     error: false,
     isFetching: false,
-    message: null,
+    message: String,
     articles: null,
   },
 
@@ -16,14 +16,14 @@ const articleSlice = createSlice({
     articleFetchStart: (state) => {
       state.error = false;
       state.isFetching = true;
-      state.message = null;
+      state.message = "";
     },
 
     //if user is authorized and status 200
     articleFetchSuccess: (state, action) => {
       state.isFetching = false;
       state.error = false;
-      (state.message = null), (state.articles = action.payload);
+      (state.message = ""), (state.articles = action.payload);
     },
     // if response status is other than 200
     articleFetchFailure: (state, action) => {

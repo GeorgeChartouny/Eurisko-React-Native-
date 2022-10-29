@@ -7,7 +7,7 @@ const userSlice = createSlice({
     error: false,
     currenUser: null,
     isFetching: false,
-    message: null,
+    message: "",
   },
 
   //reducers triggered depending on the state
@@ -15,13 +15,13 @@ const userSlice = createSlice({
     loginStart: (state) => {
       state.isFetching = true;
       state.error = false;
-      state.message = null;
+      state.message = "";
     },
     // if credentials are correct, update the currentUser data, in this case only adding the accessToken
     loginSuccess: (state, action) => {
       state.isFetching = false;
       state.error = false;
-      state.message = null;
+      state.message = "";
       state.currenUser = action.payload;
     },
     // if loginFailed

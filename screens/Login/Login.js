@@ -80,20 +80,20 @@ export const Login = ({ navigation }) => {
     try {
       await login(dispatch, { username, password });
       if (!message && !error) {
-        navigation.navigate("ArticleMainPage");
         setErr(false);
         console.log("login success");
+        navigation.navigate("ArticleMainPage");
       }
       if (error && message) {
         console.log("message!!! ", message);
         setErr(true);
-        setErrorMessage(message);
+        setErrorMessage(JSON.stringify(message));
       }
     } catch (e) {
       console.log("Error logging in!");
       console.log("catch error logging in: ", e);
       setErr(true);
-      setErrorMessage(e.response.message)
+      setErrorMessage(JSON.stringify(e.response.message))
       console.log("message catch error loggin: " , e.response.message);
     }
   };

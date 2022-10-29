@@ -153,7 +153,7 @@ export const ArticleCardComponent = ({ searchTerm }) => {
           }
         />
       )}
-      {error && <Text style={styles.ErrorMessage}> {message}</Text>}
+      {error && <Text style={styles.ErrorMessage}> {JSON.stringify(message.data.message)}</Text>}
     </>
   );
 };

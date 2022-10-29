@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import userSlice from "./userRedux";
 import articleSlice from "./articleRedux";
 
@@ -8,4 +8,6 @@ export const store = configureStore({
     user: userSlice,
     article: articleSlice,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }),
 });
