@@ -62,7 +62,7 @@ export const ArticleMainPage = ({ navigation }) => {
       //   <Text>BATATA</Text>
       //   <Text>BATATA</Text>
       // </ScrollView>
-      <View>
+      <View key={index}>
         <TouchableOpacity
           activeOpacity={0.7}
           // key={index}
@@ -156,10 +156,26 @@ export const ArticleMainPage = ({ navigation }) => {
         <>
           <FlatList
             onEndReachedThreshold={0}
-            data={articlesData}
+            data= {articlesData &&
+              articlesData
+                .filter((article) => {
+                  if (searchTerm == "") {
+                    return article;
+                  } else if (
+                    JSON.stringify(article.headline.main)
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()) ||
+                    JSON.stringify(article.lead_paragraph)
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase())
+                  ) {
+                    return article;
+                  }
+                })
+              }
             renderItem={renderItem}
             onEndReached={() => setPage(page == 2 ? page : page + 1)}
-            keyExtractor={(item) => item._id}
+            // keyExtractor={(item) => item._id}
           />
 
           {/* <ScrollView style={{ backgroundColor: "#f0f0f0" }}>
