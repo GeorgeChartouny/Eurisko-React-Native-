@@ -65,7 +65,7 @@ export const ArticleCardComponent = ({ searchTerm }) => {
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() =>
-            navigation.navigate("ArticlePage", { selectedArticle: item })
+            navigation.navigate("SingleArticleScreen", { selectedArticle: item })
           }
         >
           <View style={styles.cardContainer}>

@@ -30,8 +30,11 @@ const userSlice = createSlice({
       state.error = true;
       state.message = action.payload;
     },
+    logOut: (state) => {
+      state.currenUser = null;
+    }
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure } = userSlice.actions;
+export const { loginStart, loginSuccess, loginFailure,logOut } = userSlice.actions;
 export default userSlice.reducer;

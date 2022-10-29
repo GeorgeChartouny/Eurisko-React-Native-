@@ -10,15 +10,20 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ArticleCardComponent } from "./ArticleCardComponent";
+import { useDispatch } from "react-redux";
+import { logOut } from "../../redux/userRedux";
+
 
 export const ArticleMainPage = ({ navigation }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   // removing token from storage on logout
+  const dispatch = useDispatch();
   const handleLogout = async () => {
     // await AsyncStorage.removeItem("@storage_Key");
     try {
       await AsyncStorage.removeItem("@storage_Key");
+      dispatch(logOut());
       console.log("token removed from storage");
       navigation.navigate("Login");
     } catch (e) {
